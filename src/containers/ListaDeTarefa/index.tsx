@@ -1,23 +1,56 @@
 import { useSelector } from 'react-redux'
 import Tarefa from '../../components/Tarefas'
-import { Container } from './style'
+import { Container, Resultado } from './style'
 import { RootReducer } from '../../store'
 
 const ListaDeTarefa = () => {
   const { itens } = useSelector((state: RootReducer) => state.tarefa)
-  const { termo } = useSelector((state: RootReducer) => state.filtro)
+  const { termo, criterio, valor } = useSelector(
+    (state: RootReducer) => state.filtro
+  )
 
   const filtraTarefas = () => {
-    return itens.filter(
-      (itens) => itens.titulo.toLowerCase().search(termo.toLowerCase()) >= 0
-    )
+    let tarefasFiltradas = itens
+    if (termo !== undefined) {
+      tarefasFiltradas = tarefasFiltradas.filter(
+        (itens) => itens.titulo.toLowerCase().search(termo.toLowerCase()) >= 0
+      )
+      if (criterio === 'prioridade') {
+        tarefasFiltradas = tarefasFiltradas.filter(
+          (item) => item.prioridade === valor
+        )
+      } else if (criterio === 'status') {
+        tarefasFiltradas = tarefasFiltradas.filter(
+          (item) => item.status === valor
+        )
+      }
+
+      return tarefasFiltradas
+    } else {
+      return itens
+    }
   }
+  const exibeResultadoFiltrage = (quantidade: number) => {
+    let mensagem = ''
+    const complementacao =
+      termo !== undefined && termo.length > 0 ? ` e "${termo}" ` : ''
+
+    if (criterio === 'todas') {
+      mensagem = `${quantidade} tarefa(s) encontrada(s) como: todas ${complementacao}`
+    } else {
+      mensagem = `${quantidade} tarefa(s) encontrada(s) como: "${`${criterio} = ${valor}`}" ${complementacao}`
+    }
+    return mensagem
+  }
+
+  const tarefas = filtraTarefas()
+  const mensagem = exibeResultadoFiltrage(tarefas.length)
 
   return (
     <Container>
-      <p>2 tarefas marcadas como &apos;categoria&apos; e &apos;{termo}&apos;</p>
+      <Resultado>{mensagem}</Resultado>
       <ul>
-        {filtraTarefas().map((t) => (
+        {tarefas.map((t) => (
           <li key={t.titulo}>
             <Tarefa
               id={t.id}
