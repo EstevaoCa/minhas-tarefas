@@ -1,8 +1,7 @@
 import { Provider } from 'react-redux'
 import BarraLateral from './containers/BarraLateral'
 import ListaDeTarefa from './containers/ListaDeTarefa'
-import EstiloGlobal from './styles'
-import { Container } from './styles'
+import EstiloGlobal, { Container } from './styles'
 import store from './store'
 
 function App() {

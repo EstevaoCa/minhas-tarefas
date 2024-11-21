@@ -5,11 +5,11 @@ import * as enums from '../../Utils/enums/Tarefa'
 type TagProps = {
   prioridade?: enums.Prioridade
   status?: enums.Status
-  parematro: 'status' | 'prioridade'
+  parametro: 'status' | 'prioridade'
 }
 
 function retunaCorDeFundo(props: TagProps): string {
-  if (props.parematro === 'prioridade') {
+  if (props.parametro === 'prioridade') {
     if (props.prioridade === enums.Prioridade.URGENTE) return variaveis.vermelho
     if (props.prioridade === enums.Prioridade.IMPORTATE)
       return variaveis.amarelo2
